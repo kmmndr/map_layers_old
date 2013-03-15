@@ -187,35 +187,30 @@ Add more options to your new map in the view
 <!-- map layers js scripts -->
 <%= map_layers_includes(@map, :onload => true) do %>
   // Js code here, to be added after the map itself
-  $(document).ready(function() {
+  // you may add openlayers js code (%{map} and %{map_handler} are replaced the corresponding js objects)
 
-    // you may add openlayers js code (%{map} and %{map_handler} are replaced the corresponding js objects)
-
-    // setDragCallback handle feature drag events
-    %{map_handler}.setDragCallback('onComplete', function(feature) {
-      // and allows you to fill a form on feature drag
-      fillFormWithFeature(feature);
-    });
-
-    // handle map move and add features in the center and each corners on map move
-    %{map}.events.register("moveend", map, function() {
-      var center = %{map}.getCenter().clone().transform( %{map}.getProjectionObject(),new OpenLayers.Projection("EPSG:4326") );
-      alert("moveend : " + center);
-      feature = %{map_handler}.addFeature('pikts', center.lat, center.lon);
-
-      // use any custom js method at your convenience
-      fillFormWithLonlat(feature);
-
-      // add features to each map corners
-      bounds = map.getExtent().toGeometry().getBounds().transform( map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326") );
-      %{map_handler}.addFeature('pikts', bounds.top, bounds.left);
-      %{map_handler}.addFeature('pikts', bounds.top, bounds.right);
-      %{map_handler}.addFeature('pikts', bounds.bottom, bounds.left);
-      %{map_handler}.addFeature('pikts', bounds.bottom, bounds.right);
-    });
-
+  // setDragCallback handle feature drag events
+  %{map_handler}.setDragCallback('onComplete', function(feature) {
+    // and allows you to fill a form on feature drag
+    fillFormWithFeature('<%= @map.variable %>', feature);
   });
 
+  // handle map move and add features in the center and each corners on map move
+  %{map}.events.register("moveend", map, function() {
+    var center = %{map}.getCenter().clone().transform( %{map}.getProjectionObject(),new OpenLayers.Projection("EPSG:4326") );
+    alert("moveend : " + center);
+    feature = %{map_handler}.addFeature('pikts', center.lat, center.lon);
+
+    // use any custom js method at your convenience
+    fillFormWithLonlat(feature);
+
+    // add features to each map corners
+    bounds = map.getExtent().toGeometry().getBounds().transform( map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326") );
+    %{map_handler}.addFeature('pikts', bounds.top, bounds.left);
+    %{map_handler}.addFeature('pikts', bounds.top, bounds.right);
+    %{map_handler}.addFeature('pikts', bounds.bottom, bounds.left);
+    %{map_handler}.addFeature('pikts', bounds.bottom, bounds.right);
+  });
 <% end %>
 ```
 
