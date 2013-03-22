@@ -98,10 +98,10 @@ module MapLayers
       end
     end
 
-    def map_layers_form_container(map_builder = nil, options = {}, &block)
+    def map_layers_form_fields_container(map_builder = nil, options = {}, &block)
       #  <div class="map_info" data-map="<%= local_assigns.has_key?(:map) ? map : 'map' %>">
       html_options = {:class => 'map_info'}
-      html_options.merge! {:data => { :map => map_builder.map.variable }} unless map_builder.nil?
+      html_options.merge!({:data => { :map => map_builder.map.variable }}) unless map_builder.nil?
 
       content_tag(:div, html_options) do
         capture(&block) if block_given?
